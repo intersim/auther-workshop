@@ -27,19 +27,20 @@ app.use(require('./logging.middleware'));
 app.use(require('./statics.middleware'));
 
 app.post('/login', function (req, res, next) {
-  var email = req.body.email;
-  var password = req.body.password;
-  User.find({
-    email: email,
-    password: password
+  User.findOne({
+    email: req.body.email,
+    password: req.body.password
   })
+  .exec()
   .then(function(user) {
-    console.log(user);
-    if (user) {
+    if (!user) {
+      console.log("no such user/password combo!")
+      res.sendStatus(401);
+    } else {
+      console.log('foudn this user: ', user);
       req.session.userId = user._id;
       res.sendStatus(200);
     }
-    else res.sendStatus(401);
   })
   .then(null, next);
 });
