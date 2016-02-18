@@ -37,12 +37,16 @@ app.post('/login', function (req, res, next) {
       console.log("no such user/password combo!")
       res.sendStatus(401);
     } else {
-      console.log('foudn this user: ', user);
       req.session.userId = user._id;
-      res.sendStatus(200);
+      res.status(200).json(user);
     }
   })
   .then(null, next);
+});
+
+app.get('/logout', function (req, res, next) {
+  req.session.destroy();
+  res.sendStatus(200);
 });
 
 app.use('/api', require('../api/api.router'));

@@ -14,7 +14,7 @@
 		</li>
 	</ul>
 	<br>
-	<p contenteditable
+	<p contenteditable="{{!!currentUser()}}"
 		ng-model="story.paragraphs"
 		ng-model-options="{debounce: 500}"
 		ng-list="<br><br>"
