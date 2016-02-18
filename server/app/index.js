@@ -3,6 +3,7 @@
 var app = require('express')();
 var path = require('path');
 var session = require('express-session');
+var User = require('../api/users/user.model');
 
 app.use(require('./requestState.middleware'));
 
@@ -10,20 +11,38 @@ app.use(session({
   secret: 'tongiscool'
 }));
 
-// app.use(function (req, res, next) {
-//     console.log('session', req.session);
-//     next();
-// });
+app.use(function (req, res, next) {
+    console.log('session', req.session);
+    next();
+});
 
-// app.use(function (req, res, next) {
-//   if (!req.session.counter) req.session.counter = 0;
-//   console.log('counter', ++req.session.counter);
-//   next();
-// });
+app.use(function (req, res, next) {
+  if (!req.session.counter) req.session.counter = 0;
+  console.log('counter', ++req.session.counter);
+  next();
+});
 
 app.use(require('./logging.middleware'));
 
 app.use(require('./statics.middleware'));
+
+app.post('/login', function (req, res, next) {
+  var email = req.body.email;
+  var password = req.body.password;
+  User.find({
+    email: email,
+    password: password
+  })
+  .then(function(user) {
+    console.log(user);
+    if (user) {
+      req.session.userId = user._id;
+      res.sendStatus(200);
+    }
+    else res.sendStatus(401);
+  })
+  .then(null, next);
+});
 
 app.use('/api', require('../api/api.router'));
 
