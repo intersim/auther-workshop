@@ -32,6 +32,7 @@ router.post('/', function (req, res, next) {
 	.then(null, next);
 });
 
+
 router.get('/:id', function (req, res, next) {
 	req.requestedUser.getStories()
 	.then(function (stories) {
