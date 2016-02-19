@@ -10,8 +10,8 @@ app.directive('navbar', function ($state, $location, Auth) {
 				var path = $location.path();
 				return path.startsWith(partial);
 			},
-			scope.logout = Auth.logout;
-			scope.currentUser = Auth.getCurrentUser;
+			scope.logout = Auth.logout,
+			scope.currentUser = Auth.getCurrentUser
 		}
 	}
 });

@@ -5,6 +5,12 @@ app.factory('Auth', function ($http, $state) {
 
   var currentUser = null;
 
+  $http.get('/me/')
+  .then(res => res.data)
+  .then(function (user) {
+    currentUser = user;
+  });
+
   AuthFactory.submitLogin = function (data) {
     console.log('hit submitLogin!');
     return $http.post('/login', data)
@@ -38,7 +44,7 @@ app.factory('Auth', function ($http, $state) {
   }
 
   AuthFactory.getCurrentUser = function() {
-    console.log('we are in the current user function!!!')
+    console.log('we are in the current user function!!!');
     return currentUser;
   }
 
